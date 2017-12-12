@@ -26,8 +26,8 @@ router.route('/emails/send')
   var mailOption = {
     from : 'grundy.protoqodes@gmail.com',
     to : 'aysondennis133@gmail.com',
-    subject : 'Sign up with Go Page',
-    text : 'Thank you For Signing up ' 
+    subject : 'Angeles Push Notif',
+    text : 'test'
   }
   transporter.sendMail(mailOption,function(error,response){
     if(error) return res.status(401).send({message : 'Something Went Wrong', error});

@@ -101,6 +101,7 @@ router.route('/users/login')
 //login user admin
 router.route('/users/login/admin')
 .post(function(req,res){
+  console.log(req.body);
   User.findOne({username :req.body.username})
   .exec(function(err,user){
     

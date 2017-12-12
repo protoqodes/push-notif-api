@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 var PostsSchema = new Schema({
  title : String,
  description : String,
- img : Object,
+ img : String,
  created_at : { type: Date, default: Date.now },
  user_row : Number
 },

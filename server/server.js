@@ -41,7 +41,6 @@ app.use(function(req, res, next) {
   res.setHeader('Cache-Control', 'no-cache');
   next();
 });
-
 //Use our router configuration when we call /api
 
 app.use('/api' ,require('./controllers/users.controller'));
