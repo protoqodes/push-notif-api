@@ -1,7 +1,7 @@
 //Config
 var Config = require('../config.js')
 //Models
-var User = require('../models/user.model')
+var Comment = require('../models/comment.model')
 var Email = require('./email.controller')
 //Imports 
 var express = require('express');
@@ -25,23 +25,24 @@ var transporter = nodemailer.createTransport({
 //------------------------------------------------------------
 //now  we can set the route path & initialize the API
 //list user
-router.route('/users/list')
+router.route('/comments/list')
   //retrieve all users from the database
 
   .get(function(req, res) {
     //looks at our User Schema
-    User.find()
+    Comment.find()
+    .populate('comment')
     .sort({created_at : -1})
-    .exec(function(err,users){
+    .exec(function(err,comments){
       if(err) return res.status(512).send({message : 'an error accured'})
-       return res.json(users)
+       return res.json(comments)
     })
   });
 //------------------------------------------------------------
 //View User
-router.route('/users/view/:id')
+router.route('/comments/view/:id')
   .get(function(req,res){
-    User.findOne({_id : req.params.id})
+    Comment.findOne({_id : req.params.id})
       .exec(function(err,user){
         res.json(user);
       })
@@ -50,60 +51,26 @@ router.route('/users/view/:id')
   //------------------------------------------------------------
   //call an endpoint to return a callback
   // add user
-  router.route('/users/add')
+  router.route('/comments/add')
   //declaire what method to use
   .post(function(req,res){
     //new instance for Users schema
-    req.body.fullname = req.body.first_name + ' ' + req.body.last_name
-    var user = new User(req.body);
+    // req.body.fullname = req.body.first_name + ' ' + req.body.last_name
+    req.body.date_time = new Date()
+    req.body.is_deleted = 0
+    var comment = new Comment(req.body);
     //check username 
-    User.find({username : req.body.username})
-    .exec(function(err,verify_user){
+
+    // console.log(comment);
+
+    comment.save(function(err,comment){
       if(err) return res.status(503).send(err)
-        console.log(verify_user)
-      if(verify_user.length != 0){
-        return res.status(406).send('username has already been used')
-      }
-      else{
-        //save to database
-        user.save(function(err,user){
-        //return err
-        if(err) return res.status(503).send(err)
-        if(user){
-          user.save(function(err,save_user){
-            if(err) return res.status(503).send(err)
-              if(save_user){
-                  // app.use('/emails/send', Email)
-                // app.runMiddleware('/emails/send',{method:'post'},function(responseCode,body,headers){
-                //      // Your code here
-                //      console.log(responseCode);
-                // })
-                console.log(save_user)
-                var mailOption = {
-                  from : 'grundy.protoqodes@gmail.com',
-                  to : 'jhenssensantos@gmail.com',
-                  subject : 'Angeles Push Notif',
-                  html : '<p>Hi '+ save_user.first_name+'<br/> Click the link <a href="http://localhost:4200/activated_user/'+ save_user._id +'">Activate your account here</a></p>'
-                }
-
-                console.log(mailOption)
-                transporter.sendMail(mailOption,function(error,response){
-                  if(error) return res.status(401).send({message : 'Something Went Wrong', error});
-                  console.log(response)
-                });
-
-
-
-                return res.json(save_user)
-              }            
-          })
-        }
-        else{
-          return res.status(503).send('something went wrong!')
-        }
-      })
-      }
+      //   console.log(err);
+        // console.log(comment);
+        res.json(comment)
     })
+
+   
   })
 //------------------------------------------------------------
 //edit user
