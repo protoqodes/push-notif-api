@@ -134,7 +134,8 @@ router.route('/users/login')
         return res.status(401).send('invalid password')
       }
       if(user.is_active === 0){
-        return res.status(401).send('Need to Confirm it to Email')
+        // return res.status(401).send({message :'Need to Confirm it to Email', user : user })
+         return res.json({message :'Need to Confirm it to Email', user : user })
       }
 
       else{
