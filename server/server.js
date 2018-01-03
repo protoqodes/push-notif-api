@@ -19,7 +19,7 @@ var app = express();
 var router = express.Router();
 
 //set our port to either a predetermined port number if you have set it up, or 3001
-var port = process.env.PORT || 5015;
+var port = process.env.PORT || 5016;
 
 //now we should configure the API to use bodyParser and look for JSON data in the request body
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -46,6 +46,7 @@ app.use(function(req, res, next) {
 app.use('/api' ,require('./controllers/users.controller'));
 app.use('/api' ,require('./controllers/posts.controller'));
 app.use('/api' ,require('./controllers/email.controller'));
+app.use('/api' ,require('./controllers/comments.controller'));
 //starts the server and listens for requests
 app.listen(port, function() {
   console.log(`api running on port ${port}`);
