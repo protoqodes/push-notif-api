@@ -16,7 +16,7 @@ var MobileTokensSchema = new Schema({
  created_at : { type: Date, default: Date.now },
  mobile_token_row : Number
 },
-{ collection : 'comments' });
+{ collection : 'mobile_token' });
 MobileTokensSchema.plugin(inc.plugin, {
     model: 'MobileToken',
     field: 'mobile_token_row',

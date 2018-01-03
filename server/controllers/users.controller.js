@@ -78,7 +78,7 @@ router.route('/users/view/:id')
                 //      // Your code here
                 //      console.log(responseCode);
                 // })
-                console.log(save_user)
+                // console.log(save_user)
                 var mailOption = {
                   from : 'grundy.protoqodes@gmail.com',
                   to : 'jhenssensantos@gmail.com',
@@ -139,7 +139,7 @@ router.route('/users/login')
       }
 
       else{
-        return res.json(user)
+        return res.json({user:user})
       }
     }
     else{

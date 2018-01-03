@@ -2,12 +2,14 @@
 var Config = require('../config.js')
 //Models
 var MobileToken = require('../models/mobile-token.model')
+var User = require('../models/user.model')
 var Email = require('./email.controller')
 //Imports 
 var express = require('express');
 var app = express();
 var router = express.Router();
 var nodemailer = require('nodemailer');
+var ObjectId = require('mongoose').Types.ObjectId; 
 
 // Mail Config
 var transporter = nodemailer.createTransport({
@@ -30,8 +32,13 @@ var transporter = nodemailer.createTransport({
   //declaire what method to use
   .post(function(req,res){
     //new instance for Users schema
-
+    req.body.is_verified = 0;
+    req.body.date_time = new Date();
+    var mobile_token = new MobileToken(req.body);
     console.log(req.body);
+    mobile_token.save(function(err,token){
+      res.json(token);
+    })
     
   })
 
@@ -39,16 +46,25 @@ var transporter = nodemailer.createTransport({
 //View User
 router.route('/verify_token/activated_user/:id')
   .post(function(req,res){
-    console.log(req.body);
-    User.findOne({_id : req.body.user_id})
-      .exec(function(err,user){
-        if(user){
-          User.update({_id : user._id},{is_active : 1},function(err,user_update){
+    // console.log(req.body);
+    MobileToken.findOne({user_id :  new ObjectId(req.body.user_id),generate_token: req.body.generate_token})
+      .exec(function(err,mobile_token){
+        console.log('Jake')
+        if(err) return res.json(err)
+        console.log(err)
+        if(mobile_token){
+          User.update({_id : new ObjectId(mobile_token.user_id[0])},{is_active : 1},function(err,user_update){
             // return err
-            console.log(user_update)
-            if(err) return res.status(503).send(err)
+            
+            if(err) return res.json(err)
             if(user_update){
-              return res.json(user_update)
+               MobileToken.update({_id :  new ObjectId(mobile_token._id),generate_token: mobile_token.generate_token},{is_verified : 1},function(err,update_token){
+                   console.log(update_token)
+                   if(err) return res.json(err)
+                   return res.json(update_token)
+               })
+
+             
             }
             else{
               return res.status(503).send('something went wrong!')
