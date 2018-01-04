@@ -1,4 +1,4 @@
-//Config
+  //Config
 var Config = require('../config.js')
 //Models
 var User = require('../models/user.model')
@@ -159,6 +159,10 @@ router.route('/users/login/admin')
       if(user.password != req.body.password){
         return res.status(401).send('invalid password')
       }
+       if(user.is_active === 0){
+         // return res.status(401).send('Need to Confirm it to Email')
+         return res.json({message :'Need to Confirm it to Email', user : user })
+       }
       else{
         if(user.permission === '1'){
           return res.json(user)
@@ -175,7 +179,7 @@ router.route('/users/login/admin')
 })
 
 //------------------------------------------------------------
-//View User
+//Activate User
 router.route('/users/activated_user/:id')
   .post(function(req,res){
     console.log(req.body);
@@ -198,5 +202,6 @@ router.route('/users/activated_user/:id')
       })
   })
 //------------------------------------------------------------
+
 
 module.exports = router;
