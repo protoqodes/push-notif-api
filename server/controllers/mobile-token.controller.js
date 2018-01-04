@@ -49,13 +49,12 @@ router.route('/verify_token/activated_user/:id')
     // console.log(req.body);
     MobileToken.findOne({user_id :  new ObjectId(req.body.user_id),generate_token: req.body.generate_token})
       .exec(function(err,mobile_token){
-        console.log('Jake')
-        if(err) return res.json(err)
+        if(!mobile_token){
+          return res.json(err);
+        }  
         console.log(err)
         if(mobile_token){
           User.update({_id : new ObjectId(mobile_token.user_id[0])},{is_active : 1},function(err,user_update){
-            // return err
-            
             if(err) return res.json(err)
             if(user_update){
                MobileToken.update({_id :  new ObjectId(mobile_token._id),generate_token: mobile_token.generate_token},{is_verified : 1},function(err,update_token){
