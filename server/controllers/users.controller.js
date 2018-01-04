@@ -127,7 +127,9 @@ router.route('/users/login')
 .post(function(req,res){
   User.findOne({username :req.body.username})
   .exec(function(err,user){
-
+    console.log('--here--')
+    console.log(user)
+    console.log('--here--')
     if(err) return res.status(503).send(err)
     if(user){
       if(user.password != req.body.password){
