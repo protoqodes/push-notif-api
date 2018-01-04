@@ -139,7 +139,7 @@ router.route('/users/login')
       }
 
       else{
-        return res.json(user)
+        return res.json({user:user})
       }
     }
     else{
@@ -167,7 +167,7 @@ router.route('/users/login/admin')
       else{
         if(user.permission === '1'){
           return res.json({user:user})
-        }
+        } 
         else{
           return res.status(401).send('you are not allowed to access this site')
         }
