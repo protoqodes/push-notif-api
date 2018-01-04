@@ -55,6 +55,7 @@ router.route('/users/view/:id')
   .post(function(req,res){
     //new instance for Users schema
     req.body.fullname = req.body.first_name + ' ' + req.body.last_name
+    req.body.is_active = 1
     var user = new User(req.body);
     //check username 
     User.find({username : req.body.username})
@@ -81,7 +82,7 @@ router.route('/users/view/:id')
                 console.log(save_user)
                 var mailOption = {
                   from : 'grundy.protoqodes@gmail.com',
-                  to : 'jhenssensantos@gmail.com',
+                  to : req.body.email,
                   subject : 'Angeles Push Notif',
                   html : '<p>Hi '+ save_user.first_name+'<br/> Click the link <a href="http://localhost:4200/activated_user/'+ save_user._id +'">Activate your account here</a></p>'
                 }
