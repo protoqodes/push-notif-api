@@ -81,7 +81,7 @@ router.route('/users/view/:id')
                 console.log(save_user)
                 var mailOption = {
                   from : 'grundy.protoqodes@gmail.com',
-                  to : 'jhenssensantos@gmail.com',
+                  to : save_user.email,
                   subject : 'Angeles Push Notif',
                   html : '<p>Hi '+ save_user.first_name+'<br/> Click the link <a href="http://localhost:4200/activated_user/'+ save_user._id +'">Activate your account here</a></p>'
                 }
