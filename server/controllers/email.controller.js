@@ -2,6 +2,7 @@
 var Config = require('../config.js')
 //Models
 var User = require('../models/user.model')
+
 //Imports 
 var express = require('express');
 var app = express();

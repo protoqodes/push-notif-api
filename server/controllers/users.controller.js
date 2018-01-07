@@ -154,12 +154,12 @@ router.route('/users/login')
 //login user admin
 router.route('/users/login/admin')
 .post(function(req,res){
-  console.log(req.body);
   User.findOne({username :req.body.username})
   .exec(function(err,user){
     
     if(err) return res.status(503).send(err)
     if(user){
+
       if(user.password != req.body.password){
         return res.status(401).send('invalid password')
       }
