@@ -10,6 +10,8 @@ var app = express();
 var router = express.Router();
 var nodemailer = require('nodemailer');
 var ObjectId = require('mongoose').Types.ObjectId; 
+var twilio = require('twilio');
+var client_sms = new twilio(Config.twilio_id, Config.twilio_token);
 
 // Mail Config
 var transporter = nodemailer.createTransport({
@@ -31,14 +33,78 @@ var transporter = nodemailer.createTransport({
   router.route('/verify_token/add_user')
   //declaire what method to use
   .post(function(req,res){
-    //new instance for Users schema
-    req.body.is_verified = 0;
-    req.body.date_time = new Date();
-    var mobile_token = new MobileToken(req.body);
-    console.log(req.body);
-    mobile_token.save(function(err,token){
-      res.json(token);
+
+   
+
+    req.body.fullname = req.body.first_name + ' ' + req.body.last_name
+    // req.body.is_active = 1
+    //check username 
+    User.find({username : req.body.username})
+    .exec(function(err,verify_user){
+      if(err) return res.status(503).send(err)
+        console.log(verify_user)
+      if(verify_user.length != 0){
+        return res.status(406).send('username has already been used')
+      }
+      else{
+        //save to database
+         var user = new User();
+         user.first_name = req.body.first_name;
+         user.last_name = req.body.last_name;
+         user.mobile = req.body.mobile;
+         user.email = req.body.email;
+         user.fullname = req.body.fullname;
+         user.username = req.body.username;
+         user.password = req.body.password;
+         user.is_active = req.body.is_active;
+
+         console.log(user);
+        user.save(function(err,user){
+        //return err
+        if(err) return res.status(503).send(err)
+        if(user){
+          user.save(function(err,save_user){
+            if(err) return res.status(503).send(err)
+              if(save_user){
+                var mobile_token = new MobileToken();
+                mobile_token.user_id = save_user._id;
+                mobile_token.is_verified = 0;
+                mobile_token.date_time = new Date();
+                mobile_token.generate_token = req.body.generate_token
+                mobile_token.username = save_user.username;
+                mobile_token.password = save_user.password;
+
+                mobile_token.save(function(err,token){
+                   client_sms.messages.create({
+                      body: 'Hi' + save_user.first_name + '.This is the code:' +  token.generate_token,
+                      to: save_user.mobile,  // Text this number
+                      from: Config.twilio_number // From a valid Twilio number
+                      })
+                      .then((message) => console.log('sent'))
+                      .catch((error) => res.json(error))
+                 
+
+                  return res.json({token:token, user:save_user});
+                })
+
+                // return res.json(save_user)
+              }            
+          })
+        }
+        else{
+          return res.status(503).send('something went wrong!')
+        }
+      })
+      }
     })
+
+
+    //new instance for Users schema
+    // req.body.is_verified = 0;
+    // req.body.date_time = new Date();
+    // var mobile_token = new MobileToken(req.body);
+    // console.log(req.body);
+   
     
   })
 
