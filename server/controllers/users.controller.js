@@ -55,7 +55,7 @@ router.route('/users/view/:id')
   .post(function(req,res){
     //new instance for Users schema
     req.body.fullname = req.body.first_name + ' ' + req.body.last_name
-    req.body.is_active = 1
+    
     var user = new User(req.body);
     //check username 
     User.find({username : req.body.username})

@@ -29,30 +29,16 @@ var transporter = nodemailer.createTransport({
 //list comment
 router.route('/comments/list')
   //retrieve all users from the database
-  
+
   .get(function(req, res) {
     //looks at our User Schema
-    var skip = 0;
-    var limit = 0;
-    var options = {page : 1, limit : limit}
-    var aggregate = Comment.aggregate();
-    aggregate.lookup({
-      from : 'users',
-      localField : '_id',
-      foreignField : 'user_id',
-      as : 'user'
-    })
-    Comment.aggregatePaginate(aggregate,options,function(err, results, page, countItem){
-      if(err)
-      {
-        console.log(err)
-      }
-      else
-      {
-        res.json({results,count:page,itemSize:countItem})
-      }
-
-
+    Comment.find()
+    .populate('user_id')
+    .populate('post_id')
+    .sort({created_at : -1})
+    .exec(function(err,comments){
+      if(err) return res.status(512).send({message : 'an error accured'})
+       return res.json(comments)
     })
   });
 //------------------------------------------------------------
