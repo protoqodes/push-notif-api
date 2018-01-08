@@ -22,17 +22,19 @@ var transporter = nodemailer.createTransport({
   },
   });
 
+
 router.route('/emails/send')
-.post(function(res,req){
-  var mailOption = {
+  .post(function(req,res){
+    console.log(req.body);
+    var mailOption = {
     from : 'grundy.protoqodes@gmail.com',
-    to : 'aysondennis133@gmail.com',
-    subject : 'Angeles Push Notif',
-    text : 'test'
+    to : req.body.email,
+    subject : req.body.title,
+    text : req.body.message
   }
   transporter.sendMail(mailOption,function(error,response){
     if(error) return res.status(401).send({message : 'Something Went Wrong', error});
-    console.log(response)
+    return res.json(response)
   });
 })
 module.exports = router;

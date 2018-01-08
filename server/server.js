@@ -24,6 +24,7 @@ var port = process.env.PORT || 5016;
 //now we should configure the API to use bodyParser and look for JSON data in the request body
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 var engines = require('consolidate');
 
 // app.set('views', __dirname + '/utils/email.template/welcome-template.html');
