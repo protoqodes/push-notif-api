@@ -4,7 +4,7 @@ var Config = require('../config.js')
 var Comment = require('../models/comment.model')
 var User = require('../models/user.model')
 var Email = require('./email.controller')
-//Imports 
+//Imports
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -29,7 +29,7 @@ var transporter = nodemailer.createTransport({
 //list comment
 router.route('/comments/list')
   //retrieve all users from the database
-
+  
   .get(function(req, res) {
     //looks at our User Schema
     var skip = 0;
@@ -51,7 +51,7 @@ router.route('/comments/list')
       {
         res.json({results,count:page,itemSize:countItem})
       }
-    
+
 
     })
   });
@@ -76,7 +76,7 @@ router.route('/comments/view/:id')
     req.body.date_time = new Date()
     req.body.is_deleted = 0
     var comment = new Comment(req.body);
-    //check username 
+    //check username
 
     // console.log(comment);
 
@@ -87,7 +87,7 @@ router.route('/comments/view/:id')
         res.json(comment)
     })
 
-   
+
   })
 
 module.exports = router;
