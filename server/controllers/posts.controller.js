@@ -27,7 +27,7 @@ router.route('/posts/list')
   .get(function(req, res) {
     var skip = 0;
     var limit =  10;
-    var options = { page : 1, limit : limit}
+    var options = { page : 1, limit : limit, sortBy: {'created_at': -1}}
     var aggregate = Post.aggregate();
       
      aggregate.lookup({
@@ -36,6 +36,7 @@ router.route('/posts/list')
                   foreignField: 'post_id',
                   as: 'comment_docs'
                 })
+              // .sort({'created_at' : 1})
                 
       Post.aggregatePaginate(aggregate, options, function(err, results, page, countItem) {
         if(err)
@@ -44,7 +45,8 @@ router.route('/posts/list')
         }
         else
         {
-          res.json({results,count:page,itemSize:countItem})
+          console.log(results)
+          return res.json({results,count:page,itemSize:countItem})
         }
       })
 
