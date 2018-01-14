@@ -24,19 +24,47 @@ router.route('/posts/test')
 //now  we can set the route path & initialize the API
 //list Post
 router.route('/posts/list')
-  .get(function(req, res) {
+  .post(function(req, res) {
+
+    console.log(req.body);
+    var page = parseInt(req.body.page);
     var skip = 0;
-    var limit =  10;
-    var options = { page : 1, limit : limit, sortBy: {'created_at': -1}}
+    var limit =  parseInt(req.body.pageSize);
+    var query = {};
+    var options = { page : page, limit : limit, sortBy: {'created_at': -1}}
     var aggregate = Post.aggregate();
-      
-     aggregate.lookup({
-                  from: 'comments',
-                  localField: '_id',
-                  foreignField: 'post_id',
-                  as: 'comment_docs'
-                })
-              // .sort({'created_at' : 1})
+    
+    // console.log(req.body);
+
+    if(req.body.title != ''){
+      query['title'] =  {$regex :  new RegExp(''+req.body.title+'', "i")  };
+    }
+    if(req.body.description != ''){
+      query['description'] = { $regex :  new RegExp(''+req.body.description+'', "i") };
+    }
+    if(req.body.date_filter){
+       var date_change_start = new Date(req.body.date_filter)
+       var date_change_end = new Date(req.body.date_filter)
+          date_change_start.setDate(date_change_start.getDate())
+          date_change_start.setUTCHours(0,0,0,0)
+          date_change_end.setDate(date_change_end.getDate() + 1)
+          date_change_end.setUTCHours(0,0,0,0)
+           console.log(date_change_start) 
+          console.log(date_change_end) 
+          query['created_at'] =  {$gte: new Date(date_change_start), $lt: new Date(date_change_end)};
+         
+    }
+
+
+    aggregate
+      .match(query)    
+      .lookup({
+        from: 'comments',
+        localField: '_id',
+        foreignField: 'post_id',
+        as: 'comment_docs'
+      })
+            // .sort({'created_at' : 1})
                 
       Post.aggregatePaginate(aggregate, options, function(err, results, page, countItem) {
         if(err)
@@ -45,7 +73,7 @@ router.route('/posts/list')
         }
         else
         {
-          console.log(results)
+          // console.log(results)
           return res.json({results,count:page,itemSize:countItem})
         }
       })
@@ -90,11 +118,39 @@ router.route('/posts/add')
 //View Post
 router.route('/posts/view/:id')
   .get(function(req,res){
-    Post.findOne({_id : req.params.id})
-      .exec(function(err,post){
-        res.json(post);
+  //   Post.findOne({_id : req.params.id}).populate('comment_id')
+  //     .exec(function(err,post){
+  //       res.json(post);
+  //     })
+  // })
+   var options = {};
+   var aggregate = Post.aggregate();
+
+    aggregate
+      .match({ _id: mongoose.Types.ObjectId(req.params.id)})    
+      .lookup({
+        from: 'comments',
+        localField: '_id',
+        foreignField: 'post_id',
+        as: 'comment_docs'
       })
+            // .sort({'created_at' : 1})
+                
+      Post.aggregatePaginate(aggregate, options, function(err, results, page, countItem) {
+        if(err)
+        {
+          console.log(err)
+        }
+        else
+        {
+          // console.log(results)
+          return res.json({results})
+        }
+      })
+
   })
+
+
 //------------------------------------------------------------
 //Edit Post
 router.route('/posts/edit/:id')
