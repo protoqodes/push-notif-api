@@ -50,6 +50,19 @@ router.route('/users/list/:is_admin')
     })
     }
   });
+router.route('/users/list')
+  //retrieve all users from the database
+
+  .get(function(req, res) {
+    //looks at our User Schema
+    User.find()
+    .sort({created_at : -1})
+    .exec(function(err,users){
+      if(err) return res.status(512).send({message : 'an error accured'})
+       return res.json(users)
+    })
+    
+  });
 //------------------------------------------------------------
 //View User
 router.route('/users/view/:id')
