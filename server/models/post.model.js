@@ -13,8 +13,9 @@ var PostsSchema = new Schema({
  title : String,
  description : String,
  img : String,
+ user_id : [{type: Schema.Types.ObjectId ,ref: 'User'}],
  created_at : { type: Date, default: Date.now },
- Comments : [{type: Schema.Types.ObjectId ,ref: 'Comment'}],
+ comments : [{type: Schema.Types.ObjectId ,ref: 'Comment'}],
  user_row : Number
 },
 { collection : 'posts' });

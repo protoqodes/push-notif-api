@@ -20,6 +20,7 @@ var UsersSchema = new Schema({
  username : String,
  is_active: Number,
  img : String,
+ permission: String,
  created_at : { type: Date, default: Date.now },
  user_row : Number
 },
