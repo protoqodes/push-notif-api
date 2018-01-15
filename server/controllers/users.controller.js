@@ -25,17 +25,30 @@ var transporter = nodemailer.createTransport({
 //------------------------------------------------------------
 //now  we can set the route path & initialize the API
 //list user
-router.route('/users/list')
+router.route('/users/list/:is_admin')
   //retrieve all users from the database
 
   .get(function(req, res) {
     //looks at our User Schema
+    if(req.params.is_admin == '1'){
+    User.find({$and :[
+      {permission : {$ne : '1'}},
+      {permission : {$ne : '2'}}
+    ]})
+    .sort({created_at : -1})
+    .exec(function(err,users){
+      if(err) return res.status(512).send({message : 'an error accured'})
+       return res.json(users)
+    })
+    }
+    else{
     User.find()
     .sort({created_at : -1})
     .exec(function(err,users){
       if(err) return res.status(512).send({message : 'an error accured'})
        return res.json(users)
     })
+    }
   });
 //------------------------------------------------------------
 //View User
@@ -168,7 +181,7 @@ router.route('/users/login/admin')
          return res.json({message :'Need to Confirm it to Email', user : user })
        }
       else{
-        if(user.permission === '1'){
+        if(user.permission === '1' || user.permission === '2'){
           return res.json({user:user})
         } 
         else{

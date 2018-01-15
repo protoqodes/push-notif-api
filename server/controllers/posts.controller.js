@@ -36,10 +36,10 @@ router.route('/posts/list')
     
     // console.log(req.body);
 
-    if(req.body.title != ''){
+    if(req.body.title != '' && req.body.title != undefined){
       query['title'] =  {$regex :  new RegExp(''+req.body.title+'', "i")  };
     }
-    if(req.body.description != ''){
+    if(req.body.description != '' && req.body.description != undefined){
       query['description'] = { $regex :  new RegExp(''+req.body.description+'', "i") };
     }
     if(req.body.date_filter){
@@ -55,7 +55,7 @@ router.route('/posts/list')
          
     }
 
-
+    console.log(query);
     aggregate
       .match(query)    
       .lookup({
