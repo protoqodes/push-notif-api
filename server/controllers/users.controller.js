@@ -234,5 +234,37 @@ router.route('/users/activated_user/:id')
   })
 //------------------------------------------------------------
 
-
+router.route('/users/reset')
+  .post(function(req,res){
+    User.findOne({email : req.body.email})
+    .exec(function(err,user){
+      if(err) return res.json(err);
+        if(user){
+        function randomString(length, chars) {
+          var result = '';
+          for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+            return result;
+          }
+          var rString = randomString(5, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+          user.password = rString;
+          var mailOption = {
+                  from : 'grundy.protoqodes@gmail.com',
+                  to : req.body.email,
+                  subject : 'Angeles Push Notif Reset Password',
+                  html : 'your new password is :' + rString,
+                  }
+                transporter.sendMail(mailOption,function(error,response){
+                  if(error) return res.status(401).send({message : 'Something Went Wrong', error});
+                  console.log(response)
+                });
+          user.save(function(err,new_user_pass){
+              res.json(new_user_pass);
+          })  
+          
+        }
+        else{
+          return res.status(401).send( 'email does not exist');
+        }
+    })
+  });
 module.exports = router;

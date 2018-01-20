@@ -58,7 +58,7 @@ router.route('/comments/view/:id')
   //declaire what method to use
   .post(function(req,res){
     //new instance for Comment schema
-    // req.body.fullname = req.body.first_name + ' ' + req.body.last_name
+    
     req.body.date_time = new Date()
     req.body.is_deleted = 0
     var comment = new Comment(req.body);
@@ -70,7 +70,7 @@ router.route('/comments/view/:id')
       if(err) return res.status(503).send(err)
       //   console.log(err);
         // console.log(comment);
-        res.json(comment)
+        res.json(comment);
     })
 
 
