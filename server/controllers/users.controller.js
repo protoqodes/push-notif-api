@@ -80,6 +80,7 @@ router.route('/users/view/:id')
   //declaire what method to use
   .post(function(req,res){
     //new instance for Users schema
+    console.log(req.body);
     req.body.fullname = req.body.first_name + ' ' + req.body.last_name
     
     var user = new User(req.body);

@@ -48,6 +48,7 @@ app.use('/api' ,require('./controllers/users.controller'));
 app.use('/api' ,require('./controllers/posts.controller'));
 app.use('/api' ,require('./controllers/email.controller'));
 app.use('/api' ,require('./controllers/comments.controller'));
+app.use('/api' ,require('./controllers/feedback.controller'));
 app.use('/api' ,require('./controllers/mobile-token.controller'));
 //starts the server and listens for requests
 app.listen(port, function() {

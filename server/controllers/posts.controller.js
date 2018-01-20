@@ -42,7 +42,7 @@ router.route('/posts/list')
     if(req.body.description != '' && req.body.description != undefined){
       query['description'] = { $regex :  new RegExp(''+req.body.description+'', "i") };
     }
-    if(req.body.date_filter){
+    if(req.body.date_filter && req.body.date_filter != 'Invalid Date'){
        var date_change_start = new Date(req.body.date_filter)
        var date_change_end = new Date(req.body.date_filter)
           date_change_start.setDate(date_change_start.getDate())

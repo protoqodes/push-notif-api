@@ -19,6 +19,7 @@ var UsersSchema = new Schema({
  password : String,
  username : String,
  is_active: Number,
+ is_verify : String,
  img : String,
  permission: String,
  created_at : { type: Date, default: Date.now },
