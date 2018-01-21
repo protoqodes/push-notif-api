@@ -35,7 +35,7 @@ router.route('/feedback/add')
       to : req.body.email,
       subject : 'verify your account',
       // text : 'please verify your account by clicking this link http://localhost:4200/verify/' + req.body.user_id
-      html : '<p><br/>Please verify your account by clicking this link  Click the link <a href="http://localhost:4200/verify/'+ req.body.user_id +'">Activate your account here</a></p>'
+      html : '<p><br/>Please verify your account by clicking this link  Click the link <a href="https://anglese-city.000webhostapp.com/verify/'+ req.body.user_id +'">Activate your account here</a></p>'
     }
     transporter.sendMail(mailOption,function(error,response){
       if(error) return res.status(401).send({message : 'Something Went Wrong', error});
