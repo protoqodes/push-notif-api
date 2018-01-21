@@ -4,7 +4,7 @@ var Config = require('../config.js')
 var Feedback = require('../models/feedback.model')
 var User = require('../models/user.model')
 
-//Imports 
+//Imports
 var express = require('express');
 var app = express();
 var router = express.Router();
@@ -43,11 +43,11 @@ router.route('/feedback/add')
     });
 
     }
- // var feedback = new Feedback(req.body);
- //  return res.json(feedback.save());
+ var feedback = new Feedback(req.body);
+  return res.json(feedback.save());
 })
 
-router.route('/feedback/list') 
+router.route('/feedback/list')
  .post(function(req,res){
 
   Feedback.find()
@@ -61,7 +61,7 @@ router.route('/feedback/list')
 
 })
 
-router.route('/feedback/reply') 
+router.route('/feedback/reply')
  .post(function(req,res){
 
        var mailOption = {
@@ -75,7 +75,7 @@ router.route('/feedback/reply')
         if(error) return res.status(401).send({message : 'Something Went Wrong', error});
            Feedback.update({_id : req.body.feedback_id},{is_replied:1},function(err,feedback){
                return res.json(response)
-          
+
           })
       });
 
@@ -83,7 +83,7 @@ router.route('/feedback/reply')
 
 })
 
- router.route('/feedback/verify/:user_id') 
+ router.route('/feedback/verify/:user_id')
  .post(function(req,res){
 
      User.findOne({_id : req.body.user_id})
@@ -101,7 +101,7 @@ router.route('/feedback/reply')
             }
           })
         }
-         
+
       })
 
 
