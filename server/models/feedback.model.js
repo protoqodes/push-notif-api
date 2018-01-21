@@ -12,6 +12,7 @@ var mongooseAggregatePaginate = require('mongoose-aggregate-paginate');
 var FeedbacksSchema = new Schema({
  title : String,
  description : String,
+ is_replied: Number,
  user_id : [{type: Schema.Types.ObjectId ,ref: 'User'}],
 },
 { collection : 'feedbacks' });
