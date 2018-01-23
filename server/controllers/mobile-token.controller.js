@@ -59,6 +59,7 @@ var transporter = nodemailer.createTransport({
          user.is_active = req.body.is_active;
          user.permission = '0';
          user.is_verify = '0';
+         user.is_deleted = 0;
          console.log(user);
         user.save(function(err,user){
         //return err

@@ -85,7 +85,7 @@ router.route('/users/view/:id')
     //new instance for Users schema
     console.log(req.body);
     req.body.fullname = req.body.first_name + ' ' + req.body.last_name
-    
+    req.body.is_deleted = 0;
     var user = new User(req.body);
     //check username 
     User.find({username : req.body.username})

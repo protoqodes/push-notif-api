@@ -87,7 +87,9 @@ router.route('/posts/list')
 router.route('/posts/add')
   .post(function(req, res) {
     //looks at our Post Schema
+   req.body.is_deleted = 0;
    var post = new Post(req.body);
+
    var message = {
     to: 'registration_token_or_topics', // required fill with device token or topics
     collapse_key: 'green', 
