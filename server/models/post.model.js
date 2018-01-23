@@ -16,6 +16,7 @@ var PostsSchema = new Schema({
  user_id : [{type: Schema.Types.ObjectId ,ref: 'User'}],
  created_at : { type: Date, default: Date.now },
  comments : [{type: Schema.Types.ObjectId ,ref: 'Comment'}],
+ is_deleted: Number,
  user_row : Number
 },
 { collection : 'posts' });

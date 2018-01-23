@@ -22,6 +22,7 @@ var UsersSchema = new Schema({
  is_verify : String,
  img : String,
  permission: String,
+ is_deleted: Number,
  created_at : { type: Date, default: Date.now },
  user_row : Number
 },

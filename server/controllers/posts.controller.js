@@ -35,7 +35,7 @@ router.route('/posts/list')
     var aggregate = Post.aggregate();
     
     // console.log(req.body);
-
+    query['is_deleted'] = 0;
     if(req.body.title != '' && req.body.title != undefined){
       query['title'] =  {$regex :  new RegExp(''+req.body.title+'', "i")  };
     }
@@ -167,18 +167,43 @@ router.route('/posts/edit/:id')
       }
     })
 });
+// router.route('/posts/delete/:id')
+//   .post(function(req, res) {
+//     //find and upd
+//     Post.remove({_id : req.params.id},function(err,post){
+//       // return err
+//       if(err) return res.status(503).send(err)
+//       if(post){
+//         return res.json(post)
+//       }
+//       else{
+//         return res.status(503).send('something went wrong!')
+//       }
+//     })
+// });
+
+  //Delete User
 router.route('/posts/delete/:id')
-  .post(function(req, res) {
-    //find and upd
-    Post.remove({_id : req.params.id},function(err,post){
-      // return err
-      if(err) return res.status(503).send(err)
-      if(post){
-        return res.json(post)
-      }
-      else{
-        return res.status(503).send('something went wrong!')
-      }
-    })
-});
+  .post(function(req,res){
+    Post.findOne({_id : req.params.id})
+      .exec(function(err,post){
+        
+        if(post){
+             Post.update({_id : post._id},{is_deleted : 1},function(err,post_update){
+            // return err
+            console.log(post_update)
+            if(err) return res.status(503).send(err)
+            if(post_update){
+              return res.json(post_update)
+            }
+            else{
+              return res.status(503).send('something went wrong!')
+            }
+          })
+        }
+        // res.json(user);
+      })
+  })
+//------------------------------------------------------------
+
 module.exports = router;

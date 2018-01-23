@@ -35,6 +35,7 @@ router.route('/users/list/:is_admin')
       {permission : {$ne : '1'}},
       {permission : {$ne : '2'}}
     ]})
+    .and({is_deleted: 0})
     .sort({created_at : -1})
     .exec(function(err,users){
       if(err) return res.status(512).send({message : 'an error accured'})
@@ -43,6 +44,7 @@ router.route('/users/list/:is_admin')
     }
     else{
     User.find()
+    .and({is_deleted: 0})
     .sort({created_at : -1})
     .exec(function(err,users){
       if(err) return res.status(512).send({message : 'an error accured'})
@@ -56,6 +58,7 @@ router.route('/users/list')
   .get(function(req, res) {
     //looks at our User Schema
     User.find()
+    .and({is_deleted: 0})
     .sort({created_at : -1})
     .exec(function(err,users){
       if(err) return res.status(512).send({message : 'an error accured'})
@@ -267,4 +270,30 @@ router.route('/users/reset')
         }
     })
   });
+//Delete User
+router.route('/users/delete/:id')
+  .post(function(req,res){
+    User.findOne({_id : req.params.id})
+      .exec(function(err,user){
+        
+        if(user){
+             User.update({_id : user._id},{is_deleted : 1},function(err,user_update){
+            // return err
+            console.log(user_update)
+            if(err) return res.status(503).send(err)
+            if(user_update){
+              return res.json(user_update)
+            }
+            else{
+              return res.status(503).send('something went wrong!')
+            }
+          })
+        }
+        // res.json(user);
+      })
+  })
+//------------------------------------------------------------
+
+
+
 module.exports = router;
