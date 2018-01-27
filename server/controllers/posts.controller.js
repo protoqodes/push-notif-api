@@ -103,13 +103,15 @@ router.route('/posts/add')
     User.find().exec(function(err,users){
     if(err) return res.status(500).send('something went wrong!')
       users.forEach(user => {
-      client.messages.create({
-                    body: 'title: ' + post.title + ' description: ' +  post.description,
-                    to: user.mobile,  // Text this number
-                    from: Config.twilio_number // From a valid Twilio number
-                    })
-                    .then((message) => console.log('sent'))
-                    .catch((error) => res.json(error))
+        if(user.is_notify){
+          client.messages.create({
+                      body: 'title: ' + post.title + ' description: ' +  post.description,
+                      to: user.mobile,  // Text this number
+                      from: Config.twilio_number // From a valid Twilio number
+                      })
+                      .then((message) => console.log('sent'))
+                      .catch((error) => res.json(error))
+        }
       })
     })
     

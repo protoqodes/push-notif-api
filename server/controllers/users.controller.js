@@ -293,7 +293,27 @@ router.route('/users/delete/:id')
       })
   })
 //------------------------------------------------------------
+  router.route('/users/notify/:id')
+  //retrieve all users from the database
 
+  .post(function(req, res) {
+    //looks at our User Schema
+    User.findOne({_id : req.params.id})
+    .and({is_deleted: 0})
+    .exec(function(err,user){
+
+      if(err) return res.status(512).send({message : 'an error accured'})
+
+      user.is_notify = req.body.is_notify;
+      user.save(function(err,update){
+
+      if(err) return res.status(512).send({message : 'an error accured'})
+
+       return res.json({user:update});
+      });
+    })
+    
+  });
 
 
 module.exports = router;
