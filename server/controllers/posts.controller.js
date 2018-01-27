@@ -138,6 +138,12 @@ router.route('/posts/view/:id')
         foreignField: 'post_id',
         as: 'comment_docs'
       })
+      .lookup({
+        from: 'comments',
+        localField: '_id',
+        foreignField: 'user_id',
+        as: 'user_docs'
+      })
             // .sort({'created_at' : 1})
                 
       Post.aggregatePaginate(aggregate, options, function(err, results, page, countItem) {
@@ -147,7 +153,7 @@ router.route('/posts/view/:id')
         }
         else
         {
-          // console.log(results)
+          console.log(results)
           return res.json({results})
         }
       })

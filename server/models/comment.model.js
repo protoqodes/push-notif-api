@@ -13,6 +13,7 @@ var CommentsSchema = new Schema({
  date_time : Date,
  description : String,
  created_at : { type: Date, default: Date.now },
+ img_comment : String,
  fullname : String,
  comment_row : Number
 },

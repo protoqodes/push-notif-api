@@ -37,6 +37,7 @@ router.route('/comments/list')
     .populate('post_id')
     .sort({created_at : -1})
     .exec(function(err,comments){
+
       if(err) return res.status(512).send({message : 'an error accured'})
        return res.json(comments)
     })
@@ -46,8 +47,10 @@ router.route('/comments/list')
 router.route('/comments/view/:id')
   .get(function(req,res){
     Comment.findOne({_id : req.params.id})
+    .populate('user_id')
       .exec(function(err,user){
-        res.json(user);
+        console.log(user);
+        return res.json(user);
       })
   })
 //------------------------------------------------------------
