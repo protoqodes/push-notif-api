@@ -315,6 +315,13 @@ router.route('/users/delete/:id')
     })
     
   });
+  router.route('/users/image/:id')
+  //retrieve all users from the database
 
+  .post(function(req, res) {
+    //looks at our User Schema
+      console.log(req.body);
+    
+  });
 
 module.exports = router;
