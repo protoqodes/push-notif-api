@@ -140,8 +140,9 @@ router.route('/users/view/:id')
 //edit user
 router.route('/users/edit/:id')
 .post(function(req,res){
+  console.log(req.body);
   //find and update user
-  User.update({_id : req.params.id},req.body,function(err,user){
+  /*User.update({_id : req.params.id},req.body,function(err,user){
     // return err
     if(err) return res.status(503).send(err)
     if(user){
@@ -150,7 +151,7 @@ router.route('/users/edit/:id')
     else{
       return res.status(503).send('something went wrong!')
     }
-  })
+  })*/
 })
 //------------------------------------------------------------
 //login user
