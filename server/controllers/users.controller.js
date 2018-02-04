@@ -140,18 +140,18 @@ router.route('/users/view/:id')
 //edit user
 router.route('/users/edit/:id')
 .post(function(req,res){
-  console.log(req.body);
+  
   //find and update user
-  /*User.update({_id : req.params.id},req.body,function(err,user){
+  User.update({_id : req.params.id},req.body,function(err,user){
     // return err
     if(err) return res.status(503).send(err)
     if(user){
-      return res.json(user)
+      return res.json({user : user})
     }
     else{
       return res.status(503).send('something went wrong!')
     }
-  })*/
+  })
 })
 //------------------------------------------------------------
 //login user
@@ -320,7 +320,14 @@ router.route('/users/delete/:id')
 
   .post(function(req, res) {
     //looks at our User Schema
-      console.log(req.body);
+      User.findOne({_id : req.params.id}).
+      exec(function(err,user){
+        user.img = req.body.img;
+        user.save(function(err,uploaded){
+        console.log(uploaded);
+          return res.json({user:uploaded})
+        });
+      })
     
   });
 
