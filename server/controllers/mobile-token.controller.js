@@ -60,6 +60,7 @@ var transporter = nodemailer.createTransport({
          user.permission = '0';
          user.is_verify = '0';
          user.is_deleted = 0;
+         user.is_notify = true;
          console.log(user);
         user.save(function(err,user){
         //return err
@@ -78,7 +79,7 @@ var transporter = nodemailer.createTransport({
 
                 mobile_token.save(function(err,token){
                    client_sms.messages.create({
-                      body: 'Hi' + save_user.first_name + '.This is the code:' +  token.generate_token,
+                      body: 'Hi ' + save_user.first_name + '.This is the code:' +  token.generate_token,
                       to: save_user.mobile,  // Text this number
                       from: Config.twilio_number // From a valid Twilio number
                       })
