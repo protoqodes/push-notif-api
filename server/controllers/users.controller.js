@@ -2,6 +2,8 @@
 var Config = require('../config.js')
 //Models
 var User = require('../models/user.model')
+
+var Comment = require('../models/comment.model')
 var Email = require('./email.controller')
 //Imports 
 var express = require('express');
@@ -324,7 +326,15 @@ router.route('/users/delete/:id')
       exec(function(err,user){
         user.img = req.body.img;
         user.save(function(err,uploaded){
-        console.log(uploaded);
+        Comment.find({user_id : req.params.id})
+        .exec(function(err,comment){
+          comment.forEach(function(val,key){
+              val.img = req.body.img;
+              val.save();
+              
+          });
+        });
+
           return res.json({user:uploaded})
         });
       })

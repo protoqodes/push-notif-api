@@ -15,6 +15,7 @@ var CommentsSchema = new Schema({
  created_at : { type: Date, default: Date.now },
  img_comment : String,
  fullname : String,
+ img : String,
  comment_row : Number
 },
 { collection : 'comments' });

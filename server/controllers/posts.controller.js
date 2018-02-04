@@ -73,7 +73,6 @@ router.route('/posts/list')
         }
         else
         {
-          // console.log(results)
           return res.json({results,count:page,itemSize:countItem})
         }
       })
