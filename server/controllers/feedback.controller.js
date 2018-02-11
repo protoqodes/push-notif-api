@@ -39,7 +39,7 @@ router.route('/feedback/add')
       //to : 'aysondennis133@gmail.com',
       subject : 'verify your account',
       // text : 'please verify your account by clicking this link http://localhost:4200/verify/' + req.body.user_id
-      html : '<p><br/>Please verify your account by clicking this link  Click the link <a href="https://anglese-city.000webhostapp.com/verify/'+ req.body.user_id +'">Activate your account here</a></p>'
+      html : '<p><br/>Please verify your account by clicking this link  Click the link <a href="http://angeles-admin.byethost22.com/verify/'+ req.body.user_id +'">Activate your account here</a></p>'
     }
     transporter.sendMail(mailOption,function(error,response){
       if(error)
