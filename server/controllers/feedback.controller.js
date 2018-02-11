@@ -21,6 +21,9 @@ var transporter = nodemailer.createTransport({
     refreshToken: Config.node_mailer_refresh_token
     // accessToken: 'ya29.GluuBAYPJAEgAY_wz2LvYcpXNN3N_Ieag0zTVfzpvXlaXh5QWxEyN41uJ8hY_cKo3rGitXTdqYXa7ZKtQMRfZC_ZuFvdWefvuKKAT7Iuw3G5G-ZPwUmTb_p-diKI',
   },
+  tls: {
+        rejectUnauthorized: false
+    }
   });
 
 
@@ -28,22 +31,25 @@ router.route('/feedback/add')
   .post(function(req,res){
 
   req.body.is_replied = 0
-  if(req.body.is_verify == '0'){
+  if(req.body.is_verify != '1'){
     console.log(req.body.email);
     var mailOption = {
       from : 'grundy.protoqodes@gmail.com',
       to : req.body.email,
+      //to : 'aysondennis133@gmail.com',
       subject : 'verify your account',
       // text : 'please verify your account by clicking this link http://localhost:4200/verify/' + req.body.user_id
       html : '<p><br/>Please verify your account by clicking this link  Click the link <a href="https://anglese-city.000webhostapp.com/verify/'+ req.body.user_id +'">Activate your account here</a></p>'
     }
     transporter.sendMail(mailOption,function(error,response){
-      if(error) return res.status(401).send({message : 'Something Went Wrong', error});
+      if(error)
+      console.log(error); 
+      return res.status(401).send({message : 'Something Went Wrong', error});
       //return res.json(response)
     });
 
     }
- var feedback = new Feedback(req.body);
+  var feedback = new Feedback(req.body);
   return res.json(feedback.save());
 })
 
