@@ -14,6 +14,7 @@ var FeedbacksSchema = new Schema({
  description : String,
  is_replied: Number,
  user_id : [{type: Schema.Types.ObjectId ,ref: 'User'}],
+ is_verify : String,
 },
 { collection : 'feedbacks' });
 FeedbacksSchema.plugin(inc.plugin, {
