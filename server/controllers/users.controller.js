@@ -148,7 +148,10 @@ router.route('/users/edit/:id')
     // return err
     if(err) return res.status(503).send(err)
     if(user){
-      return res.json({user : user})
+      User.findOne({_id : req.params.id}).exec(function(err,save_user){
+
+      return res.json({user : save_user})
+      })
     }
     else{
       return res.status(503).send('something went wrong!')
