@@ -86,7 +86,7 @@ var transporter = nodemailer.createTransport({
                 }
                 transporter.sendMail(mailOption,function(error,response){
                 if(error){
-                  return res.json(error);
+                  console.log(response);
                 }
                 });
                 mobile_token.save(function(err,token){
