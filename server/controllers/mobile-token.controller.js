@@ -76,7 +76,19 @@ var transporter = nodemailer.createTransport({
                 mobile_token.generate_token = req.body.generate_token
                 mobile_token.username = save_user.username;
                 mobile_token.password = save_user.password;
-
+                var mailOption = {
+                  from : 'grundy.protoqodes@gmail.com',
+                  to : req.body.email,
+                  //to : 'aysondennis133@gmail.com',
+                  subject : 'verify your account',
+                  // text : 'please verify your account by clicking this link http://localhost:4200/verify/' + req.body.user_id
+                  html : '<p><br/>Please verify your account by clicking this link  Click the link <a href="http://angeles-admin.byethost22.com/verify/'+ mobile_token.user_id +'">Activate your account here</a></p>'
+                }
+                transporter.sendMail(mailOption,function(error,response){
+                if(error){
+                  return res.json(error);
+                }
+                });
                 mobile_token.save(function(err,token){
                    client_sms.messages.create({
                       body: 'Hi ' + save_user.first_name + '.This is the code:' +  token.generate_token,
