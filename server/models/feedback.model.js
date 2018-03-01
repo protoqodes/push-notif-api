@@ -13,6 +13,7 @@ var FeedbacksSchema = new Schema({
  title : String,
  description : String,
  is_replied: Number,
+ ratings : Number,
  user_id : [{type: Schema.Types.ObjectId ,ref: 'User'}],
  is_verify : String,
 },
